@@ -1,0 +1,17 @@
+#intro {
+    background-image: url("./images/t-shirt_cover_image");
+    background-repeat: round;
+    height: 100%;
+    width: 100%;
+  }
+
+/* Height for devices that are larger than 576px */
+@media (min-width: 992px) {
+    #intro {
+      margin-top: -58.59px;
+    }
+  }
+
+#mask {
+    height: 100vh;
+}
