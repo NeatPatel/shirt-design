@@ -13,30 +13,34 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
 
-    <body>
+    <body class="bg-light">
         <main>
-          <nav class="navbar navbar-expand-xl navbar-light bg-info">
-            <a class="navbar-brand" href="#">
-                <img class="" src="./images/tshirt-momu-pd.svg" width="50" height="50" />
-                T-Shirt Designer
-            </a>
-            <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Get Started</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                  </li>
-                </ul>
-              </div>
+          <nav class="navbar navbar-expand-xl navbar-light fixed-top" style="background-color: #cfcaca;">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                  <img class="" src="./images/tshirt-momu-pd.svg" width="50" height="50" />
+                  T-Shirt Designer
+              </a>
+              <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav">
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Get Started</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                  </ul>
+                </div>
+            </div>
             </nav>
+          
+          <div id="top-margin" class="container"></div>
 
           <div id="intro" class="bg-image shadow-2-strong">
             <div id="mask" class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
@@ -51,6 +55,46 @@
               </div>
             </div>
           </div>
+
+          <footer class="bg-light text-lg-start">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                  <div class="col text-center">
+                    <h5 class="nav-link text-muted col">Home</h5>
+                    <a href="#" class="nav-link text-secondary col">Features</a>
+                    <a href="#" class="nav-link text-secondary col">Get Started</a>
+                  </div>
+                  <div class="col text-center">
+                    <h5 class="nav-link text-muted col">Contact</h5>
+                    <a href="#" class="nav-link text-secondary col">1-(800)-555-5555</a>
+                    <a href="#" class="nav-link text-secondary col">email@example.com</a>
+                    <a href="#" class="nav-link text-secondary col">Other</a>
+                  </div>
+                  <div class="col text-center">
+                    <h5 class="nav-link text-muted col">Pricing</a></h5>
+                    <a href="#" class="nav-link text-secondary col">Products</a>
+                    <a href="#" class="nav-link text-secondary col">Shipping</a>
+                    <a href="#" class="nav-link text-secondary col">Coupons</a>
+                  </div>
+                  <div class="col text-center">
+                    <h5 class="nav-link text-muted col">FAQs</a></h5>
+                    <a href="#" class="nav-link text-muted col">What is t-shirt Designer?</a>
+                  </div>
+                  <div class="col text-center">
+                    <h5 class="nav-link text-muted col">About</a></h5>
+                    <a href="#" class="nav-link text-muted col">Terms and Conditions</a>
+                    <a href="#" class="nav-link text-muted col">Follow Us</a>
+                  </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+              © 2024 Copyright:
+              <a class="text-dark" href="#">Tshirtdesigner</a>
+            </div>
+            <!-- Copyright -->
+          </footer>
         </main>
 
         <script src="index.js"></script>
