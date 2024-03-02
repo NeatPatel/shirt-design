@@ -1,5 +1,5 @@
 #intro {
-    background-image: url("./images/t-shirt_cover_image");
+    background-image: url("../images/t-shirt_cover_image");
     background-repeat: round;
     height: 100%;
     width: 100%;
@@ -18,4 +18,8 @@
 
 #top-margin {
     padding-top: 10.5%;
+}
+
+#top-margin-login {
+  padding-top: 8%;
 }
