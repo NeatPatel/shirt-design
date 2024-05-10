@@ -5,7 +5,7 @@ const SQL = await initSqlJs({
   });
   function loadBinaryFile(path,success) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", path, true); 
+    xhr.open("GET", path, true);
     xhr.responseType = "arraybuffer";
     xhr.onload = function() {
         var data = new Uint8Array(xhr.response);
