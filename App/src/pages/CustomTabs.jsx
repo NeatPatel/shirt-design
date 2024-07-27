@@ -1,19 +1,74 @@
 import styles from './customtabs.module.scss';
-import { Nav } from 'react-bootstrap';
+import { Card, Nav, Tab, Tabs } from 'react-bootstrap';
+import SplitContentBlock from '../components/SplitContentBlock';
+
+/*
+<Nav fill variant="tabs" defaultActiveKey="product-design">
+            <Nav.Item>
+                <Nav.Link datatoggle="tab" href="#tab1" className="text-dark text-decoration-none" eventKey="product-design">Product Design</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+                <Nav.Link datatoggle="tab" href="#tab2" className="text-dark text-decoration-none" eventKey="shapes-and-art">Shapes & Art</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+                <Nav.Link datatoggle="tab" href="#tab3" className="text-dark text-decoration-none" eventKey="upload">Upload</Nav.Link>
+            </Nav.Item>
+        </Nav>
+        */
 
 function CustomTabs() {
     return (<>
-        <Nav fill variant="tabs" defaultActiveKey="product-design">
-            <Nav.Item>
-                <Nav.Link className="text-dark text-decoration-none" eventKey="product-design">Product Design</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link className="text-dark text-decoration-none" eventKey="shapes-and-art">Shapes & Art</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link className="text-dark text-decoration-none" eventKey="upload">Upload</Nav.Link>
-            </Nav.Item>
-        </Nav>
+        <Tabs defaultActiveKey="productDesign" justify>
+            <Tab eventKey="productDesign" title="Product Design">
+                <Tabs defaultActiveKey="shirtType" justify variant='pills'>
+                    <Tab eventKey="shirtType" title="Shirt Type">
+                        <SplitContentBlock mt={1}
+                        left={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        right={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        />
+                    </Tab>
+                    <Tab eventKey="shirtColor" title="Color">
+                        color stuff
+                    </Tab>
+                    <Tab eventKey="patterns" title="Premade Patterns">
+                    <SplitContentBlock mt={1}
+                        left={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        right={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        />
+                    </Tab>
+                </Tabs>    
+            </Tab>
+            <Tab eventKey="shapesArt" title="Shapes & Art">
+                shape stuff
+            </Tab>
+            <Tab eventKey="uploadTab" title="Upload">
+                upload stuff
+            </Tab>
+        </Tabs>
     </>);
 }
 
