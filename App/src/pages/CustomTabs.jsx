@@ -63,7 +63,63 @@ function CustomTabs() {
                 </Tabs>    
             </Tab>
             <Tab eventKey="shapesArt" title="Shapes & Art">
-                shape stuff
+                <p className="text-center">Select a tab to browse that category!</p>
+                <Tabs justify variant='pills'>
+                    <Tab eventKey="shape1" title="Shape1">
+                        <SplitContentBlock mt={1}
+                        left={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        right={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        />
+                    </Tab>
+                    <Tab eventKey="shape2" title="Shape2">
+                        <SplitContentBlock mt={1}
+                            left={<>
+                                <Card>
+                                    <p>image goes here</p>
+                                    <h1>Title</h1>
+                                    <p>text</p>
+                                </Card>
+                            </>}
+                            right={<>
+                                <Card>
+                                    <p>image goes here</p>
+                                    <h1>Title</h1>
+                                    <p>text</p>
+                                </Card>
+                            </>}
+                        />
+                    </Tab>
+                    <Tab eventKey="shape3" title="Shape3">
+                    <SplitContentBlock mt={1}
+                        left={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        right={<>
+                            <Card>
+                                <p>image goes here</p>
+                                <h1>Title</h1>
+                                <p>text</p>
+                            </Card>
+                        </>}
+                        />
+                    </Tab>
+                </Tabs>
             </Tab>
             <Tab eventKey="uploadTab" title="Upload">
                 upload stuff
