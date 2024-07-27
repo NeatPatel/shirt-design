@@ -1,3 +1,27 @@
+/*
+.canvasDiv {
+    width: 100%;
+    height: 75svh;    
+}
+
+.img {
+    //width: 40svw;
+    //height: 78svh;
+    width: 40svw;
+    height: auto;
+}
+
+.canvas {
+    // All these values are relative to img class by ratio
+    //top: 6svh;
+    //width: 16svw;
+    //height: 50svh;
+    top: 6svh;
+    width: 16svw;
+    height: 50svh;
+
+    z-index: 3;
+}*/
 
 .canvasDiv {
     width: 100%;
@@ -5,25 +29,24 @@
 }
 
 .img {
-    width: 40svw;
-    height: 70svh;
+    /*width: 40svw;
+    height: 78svh;*/
+    height: 75svh;
+    width: 75svh;
+    background-image: url('../assets/shirt.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
-
-/*
-Base ratios:
-.img width: 10svh
-.img height: 10svh
-
-.canvas top: 1svh
-.canvas width: 5svh
-.canvas 7svh
-*/
 
 .canvas {
     // All these values are relative to img class by ratio
-    top: 7svh;
-    width: 18svw;
-    height: 47svh;
+    /*top: 6svh;
+    width: 16svw;
+    height: 50svh;*/
+    width: 35svh;
+    height: 55svh;
+    border: 1px solid green;
 
     z-index: 3;
 }

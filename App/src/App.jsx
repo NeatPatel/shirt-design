@@ -8,10 +8,10 @@ function App() {
     <>
       <Container fluid>
         <Row>
-          <Col className="mt-1">
+          <Col xs={12} sm={12} md={4} lg={4} xl={4} className="mt-1">
             <CustomTabs />
           </Col>
-          <Col className="col-8 me-1 mt-1">
+          <Col xs={12} sm={12} md={8} lg={8} xl={8} className="mt-1">
             <ShirtCanvas />
           </Col>
         </Row>
