@@ -1,5 +1,5 @@
 import styles from './customtabs.module.scss';
-import { Card, Nav, Tab, Tabs } from 'react-bootstrap';
+import { Form, Card, Nav, Tab, Tabs, Button } from 'react-bootstrap';
 import SplitContentBlock from '../components/SplitContentBlock';
 
 /*
@@ -122,7 +122,13 @@ function CustomTabs() {
                 </Tabs>
             </Tab>
             <Tab eventKey="uploadTab" title="Upload">
-                upload stuff
+                <Form.Group controlId="formFile" className="mb-3 text-center mt-3">
+                    <Form.Label>Upload File</Form.Label>
+                    <Form.Control type="file" />
+                </Form.Group>
+                <div className="text-center">
+                    <Button size="lg" className="text-center">Add to Canvas</Button>
+                </div>
             </Tab>
         </Tabs>
     </>);
