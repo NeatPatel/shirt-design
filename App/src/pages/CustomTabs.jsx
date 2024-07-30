@@ -3,23 +3,7 @@ import { Form, Card, Nav, Tab, Tabs, Button } from 'react-bootstrap';
 import SplitContentBlock from '../components/SplitContentBlock';
 
 /*
-<Nav fill variant="tabs" defaultActiveKey="product-design">
-            <Nav.Item>
-                <Nav.Link datatoggle="tab" href="#tab1" className="text-dark text-decoration-none" eventKey="product-design">Product Design</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link datatoggle="tab" href="#tab2" className="text-dark text-decoration-none" eventKey="shapes-and-art">Shapes & Art</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link datatoggle="tab" href="#tab3" className="text-dark text-decoration-none" eventKey="upload">Upload</Nav.Link>
-            </Nav.Item>
-        </Nav>
-        */
-
-function CustomTabs() {
-    return (<>
-        <Tabs defaultActiveKey="productDesign" justify>
-            <Tab eventKey="productDesign" title="Product Design">
+<Tab eventKey="productDesign" title="Product Design">
                 <Tabs defaultActiveKey="shirtType" justify variant='pills'>
                     <Tab eventKey="shirtType" title="Shirt Type">
                         <SplitContentBlock mt={1}
@@ -62,6 +46,11 @@ function CustomTabs() {
                     </Tab>
                 </Tabs>    
             </Tab>
+*/
+
+function CustomTabs() {
+    return (<>
+        <Tabs justify>
             <Tab eventKey="shapesArt" title="Shapes & Art">
                 <p className="text-center">Select a tab to browse that category!</p>
                 <Tabs justify variant='pills'>
