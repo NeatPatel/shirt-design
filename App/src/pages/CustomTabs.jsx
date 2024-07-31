@@ -2,26 +2,12 @@ import styles from './customtabs.module.scss';
 import { Form, Card, Nav, Tab, Tabs, Button } from 'react-bootstrap';
 import SplitContentBlock from '../components/SplitContentBlock';
 
-/*
-<Nav fill variant="tabs" defaultActiveKey="product-design">
-            <Nav.Item>
-                <Nav.Link datatoggle="tab" href="#tab1" className="text-dark text-decoration-none" eventKey="product-design">Product Design</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link datatoggle="tab" href="#tab2" className="text-dark text-decoration-none" eventKey="shapes-and-art">Shapes & Art</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link datatoggle="tab" href="#tab3" className="text-dark text-decoration-none" eventKey="upload">Upload</Nav.Link>
-            </Nav.Item>
-        </Nav>
-        */
-
 function CustomTabs() {
     return (<>
         <Tabs defaultActiveKey="productDesign" justify>
             <Tab eventKey="productDesign" title="Product Design">
                 <Tabs defaultActiveKey="shirtType" justify variant='pills'>
-                    <Tab eventKey="shirtType" title="Shirt Type">
+                    <Tab eventKey="shirtType" title="Choose Shirt Type">
                         <SplitContentBlock mt={1}
                         left={<>
                             <Card>
@@ -39,7 +25,7 @@ function CustomTabs() {
                         </>}
                         />
                     </Tab>
-                    <Tab eventKey="shirtColor" title="Color">
+                    <Tab eventKey="shirtColor" title="Choose Shirt Color">
                         color stuff
                     </Tab>
                     <Tab eventKey="patterns" title="Premade Patterns">
@@ -62,7 +48,7 @@ function CustomTabs() {
                     </Tab>
                 </Tabs>    
             </Tab>
-            <Tab eventKey="shapesArt" title="Shapes & Art">
+            <Tab eventKey="shapesArt" title="Shapes and Art">
                 <p className="text-center">Select a tab to browse that category!</p>
                 <Tabs justify variant='pills'>
                     <Tab eventKey="shape1" title="Shape1">
@@ -121,7 +107,7 @@ function CustomTabs() {
                     </Tab>
                 </Tabs>
             </Tab>
-            <Tab eventKey="uploadTab" title="Upload">
+            <Tab eventKey="uploadTab" title="Upload an Image">
                 <Form.Group controlId="formFile" className="mb-3 text-center mt-3">
                     <Form.Label>Upload File</Form.Label>
                     <Form.Control type="file" />
