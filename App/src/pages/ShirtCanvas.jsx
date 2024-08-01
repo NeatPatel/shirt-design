@@ -17,15 +17,15 @@ function ShirtCanvas() {
             <Container fluid>
                 <Row>
                     <Col>
-                        <Button className="ms-2 my-2 me-auto" variant="light">
+                        <Button id="undo" disabled className="ms-2 my-2 me-auto" variant="light" title="Undo">
                             <Image className="pe-none" src={undo} width="35svh" height="35svh"  />
                         </Button>
-                        <Button className="my-2 me-auto" variant="light">
+                        <Button id="redo" disabled className="my-2 me-auto" variant="light" title="Redo">
                             <Image className="pe-none" src={redo} width="35svh" height="35svh"  />
                         </Button>
                     </Col>
                     <Col className="text-end">
-                        <Button className="ms-auto me-2 my-2 p-1"  variant="light" onClick={handleShow}>
+                        <Button className="ms-auto me-2 my-2 p-1"  variant="light" onClick={handleShow} title="Shirt Angle">
                             <Image className="pe-none" src={menu} width="50svh" height="50svh" />
                         </Button>
                     </Col>
