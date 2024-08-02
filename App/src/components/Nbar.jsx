@@ -15,7 +15,7 @@ function Nbar() {
                     <Nav className="ms-auto align-items-right" navbarScroll>
                         <Link to="/about" className="nav-link">About</Link>
                         <Link to="/pricing" className="nav-link">Pricing</Link>
-                        <Link to="/contact-us" className="nav-link">Editor</Link>
+                        <Link to="/editor" className="nav-link">Editor</Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
