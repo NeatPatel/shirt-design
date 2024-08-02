@@ -203,6 +203,10 @@ function DesignCanvas() {
         if(uploadSrc.value) {
             const img = await FabricImage.fromURL(uploadSrc.value);
             img.scaleToWidth(100);
+            img.set({
+                left: 100,
+                top: 50
+            });
             canvas.add(img);
             canvas.requestRenderAll();
             save();
@@ -242,7 +246,7 @@ function DesignCanvas() {
         const rect = new Rect({
             left: 100,
             top: 50,
-            fill: "#111111",
+            fill: "#ff000011",
             width: 150,
             height: 100
         });
