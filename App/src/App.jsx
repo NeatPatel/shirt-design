@@ -11,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navbar />}>
             <Route index element={<Editor />} />
+            <Route path="editor" element={<Editor />}/>
           </Route>
         </Routes>
       </HashRouter>
