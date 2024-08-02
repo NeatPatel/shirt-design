@@ -2,11 +2,7 @@ import styles from './footer.module.scss';
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Navbar, Card, ListGroup, Col, Row } from 'react-bootstrap';
-
-//<Link to="/privacy-policy" className="text-decoration-none text-light"><p>Privacy Policy</p></Link>
-//<Link to="/terms-and-conditions" className="text-decoration-none text-light"><p>Terms and Conditions</p></Link>
-//<Link to="/contact-us" className="text-decoration-none text-light"><p>Contact Us</p></Link>
-
+import logo from '../assets/SoramoLogo.png'
 function Footer() {
     const pathName = useLocation();
 
@@ -21,8 +17,7 @@ function Footer() {
                 <Card.Header className="ps-4 py-4">
                     <Row>
                         <Col className="col-6">
-                            <Link to="/" className="text-decoration-none text-light">logo</Link><br />
-                            <Link to="/" className="text-decoration-none text-light"><h4>Soramo Design Playground</h4></Link>
+                            <Link to="/" className="text-decoration-none text-light"><img src={logo} height="160vh" width="160vh" className="d-inline-block align-items-center" /></Link><br />
                         </Col>
                         <Col>
                             <h4 className="text-light mb-3">About</h4>
