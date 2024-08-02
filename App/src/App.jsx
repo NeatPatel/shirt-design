@@ -1,23 +1,21 @@
-import { Container, Row, Col, Card } from 'react-bootstrap';
-import ShirtCanvas from './pages/ShirtCanvas.jsx';
-import CustomTabs from './pages/CustomTabs.jsx';
-import styles from './main.module.scss';
+import { HashRouter, Routes, Route, Link } from 'react-router-dom';
+
+import Editor from './pages/Editor.jsx';
+import { Nbar as Navbar } from './components/Nbar.jsx';
+
 
 function App() {
   return (
     <>
-      <Container fluid>
-        <Row>
-          <Col xs={12} sm={12} md={4} lg={4} xl={4} className="mt-1">
-            <CustomTabs />
-          </Col>
-          <Col xs={12} sm={12} md={8} lg={8} xl={8} className="mt-1">
-            <ShirtCanvas />
-          </Col>
-        </Row>
-      </Container>
+      <HashRouter>
+        <Routes>
+          <Route path="/" element={<Navbar />}>
+            <Route index element={<Editor />} />
+          </Route>
+        </Routes>
+      </HashRouter>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
