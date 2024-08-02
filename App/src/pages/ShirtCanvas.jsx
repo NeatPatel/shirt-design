@@ -3,6 +3,7 @@ import styles from './shirtcanvas.module.scss';
 import menu from '../assets/menu_hamburger.png';
 import redo from '../assets/redo.png';
 import undo from '../assets/undo.png';
+import clear from '../assets/remove.png';
 import DesignCanvas from '../components/DesignCanvas.jsx';
 import { Container, Row, Col, Card, Button, Offcanvas, Image } from 'react-bootstrap';
 
@@ -22,6 +23,9 @@ function ShirtCanvas() {
                         </Button>
                         <Button id="redo" disabled className="my-2 me-auto" variant="light" title="Redo">
                             <Image className="pe-none" src={redo} width="35svh" height="35svh"  />
+                        </Button>
+                        <Button id="clear" className="my-2 me-auto" variant="light" title="Clear Canvas">
+                            <Image className="pe-none" src={clear} width="35svh" height="35svh"  />
                         </Button>
                     </Col>
                     <Col className="text-end">

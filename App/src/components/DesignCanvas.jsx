@@ -3,11 +3,13 @@ import styles from './designcanvas.module.scss';
 import { Container } from 'react-bootstrap';
 import { useWindowSize } from '../components/useWindowSize.jsx';
 import shirt from '../assets/shirt.svg';
-import { Canvas, FabricImage, Rect } from 'fabric';
+import { Canvas, FabricImage, Rect, util } from 'fabric';
 
 function DesignCanvas() {
     const canvasRef = useRef(null);
     const [ canvas, setCanvas ] = useState(null);
+
+    let pasteShape;
 
     // Undo/Redo Variables
     let currentState;
@@ -15,6 +17,7 @@ function DesignCanvas() {
     let redoStates = [];
     let redoButton;
     let undoButton;
+    let clearButton;
 
     const { windowWidth, windowHeight } = useWindowSize();
     // Basically says: if the window height > window width, scale down (otherwise regular size)
@@ -39,10 +42,7 @@ function DesignCanvas() {
             canvas.setHeight(canvasHeight);
             canvas.calcOffset();
 
-            // Set Undo/Redo Buttons
-            redoButton = document.getElementById("redo");
-            undoButton = document.getElementById("undo");
-            // End Set Undo/Redo Buttons
+            setEditorIds();
 
             const setup = () => {
                 try {
@@ -59,10 +59,7 @@ function DesignCanvas() {
     // Initialize Canvas Settings
     useEffect(() => {
         if(canvas) {
-            // Set Undo/Redo Buttons
-            redoButton = document.getElementById("redo");
-            undoButton = document.getElementById("undo");
-            // End Set Undo/Redo Buttons
+            setEditorIds();
 
             // Disable Group Selection
             canvas.selection = false;
@@ -82,13 +79,46 @@ function DesignCanvas() {
             // End Create Background Image
 
             // keydown Events
-            const onKeyDown = (e) => {
+            const onKeyDown = async (e) => {
                 if(e.keyCode == 8 || e.keyCode == 46) {
+                    // Press "Backspace" or "Delete"
                     canvas.remove(canvas.getActiveObject());
                     save();
                 } else if(e.keyCode == 27) {
+                    // Press "Esc"
                     canvas.discardActiveObject();
                     canvas.requestRenderAll();
+                } else if(e.keyCode == 67) {
+                    // Press "C"
+                    if(canvas.getActiveObject()) pasteShape = await canvas.getActiveObject().clone();
+
+                    if(pasteShape) {
+                        pasteShape.set({
+                            left: (pasteShape.left + 3),
+                            top: (pasteShape.top + 3)
+                        });
+                    }
+                } else if(e.keyCode == 86) {
+                    // Press "V"
+                    if(pasteShape) {
+                        let pasted = await pasteShape.clone();
+                        canvas.add(pasted);
+                        canvas.setActiveObject(pasted);
+                        canvas.renderAll();
+                        pasteShape.set({
+                            left: (pasteShape.left + 3),
+                            top: (pasteShape.top + 3)
+                        });
+                        save();
+                    }
+                } else if(e.keyCode == 88) {
+                    // Press "X"
+                    if(canvas.getActiveObject()) {
+                        pasteShape = canvas.getActiveObject();
+                        canvas.remove(pasteShape);
+                        canvas.renderAll();
+                        save();
+                    }
                 }
             }
             // End keydown Events
@@ -101,12 +131,25 @@ function DesignCanvas() {
             window.addEventListener("keydown", onKeyDown);
             undoButton.addEventListener("click", () => replayState(undoStates, redoStates, redoButton, undoButton));
             redoButton.addEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
+            clearButton.addEventListener("click", () => clearObjects());
+
+            window.onload = () => {
+                window.addEventListener("beforeunload", (e) => {
+                    if(undoStates.length == 0) return undefined;
+
+                    let confirmMsg = "Are you sure you want to leave?\nYou have unsaved changes.";
+
+                    (e || window.event).returnValue = confirmMsg;
+                    return confirmMsg;
+                });
+            };
             // End Event Listeners
 
             // Remove Event Listeners (if any)
             return () => {
                 undoButton.removeEventListener("click", () => replayState(undoStates, redoStates, redoButton, undoButton));
                 redoButton.removeEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
+                clearButton.removeEventListener("click", () => clearObjects());
                 window.removeEventListener("keydown", onKeyDown);
             }
         }
@@ -124,13 +167,18 @@ function DesignCanvas() {
         
         canvas.clear();
         canvas.loadFromJSON(currentState, () => {
+            canvas.setWidth(canvasWidth);
+            canvas.setHeight(canvasHeight);
+            canvas.calcOffset();
+
             canvas.requestRenderAll();
-            loadImg();
+            if(canvas.clipPath) {
+                canvas.clipPath = null;
+                loadImg();
+            }
         });
 
-        if(!playStack.length) {
-            loadImg();
-        }
+        loadImg();
 
         onButton.disabled = false;
         if(playStack.length) {
@@ -154,13 +202,25 @@ function DesignCanvas() {
         const img = await FabricImage.fromURL(shirt);
         img.scaleToWidth(canvasWidth);
         canvas.add(img);
-        canvas.backgroundColor = "#dddddd";
+        canvas.backgroundColor = "#ffffff";
         
         let shape = canvas.item(canvas.size() - 1);
         canvas.remove(shape);
         canvas.clipPath = shape;
         canvas.clipPath.fixed = true;
-        console.log("this run!");
+    }
+
+    function setEditorIds() {
+        redoButton = document.getElementById("redo");
+        undoButton = document.getElementById("undo");
+        clearButton = document.getElementById("clear");
+    }
+
+    function clearObjects() {
+        canvas.forEachObject((obj) => {
+            canvas.remove(obj);
+        });
+        save();
     }
 
     const addRect = () => {
@@ -178,7 +238,7 @@ function DesignCanvas() {
 
     return (<>
         <Container fluid className={styles.canvasDiv + " m-auto d-flex"}>
-            <div className={styles.img + " m-auto d-flex justify-content-center align-items-center"}>
+            <div style={{backgroundColor: "#dddddd"}} className={styles.img + " m-auto d-flex justify-content-center align-items-center"}>
                 <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />
             </div>
         </Container>

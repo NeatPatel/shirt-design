@@ -7,7 +7,7 @@ function CustomTabs() {
         <Tabs defaultActiveKey="productDesign" justify>
             <Tab eventKey="productDesign" title="Product Design">
                 <Tabs defaultActiveKey="shirtType" justify variant='pills'>
-                    <Tab eventKey="shirtType" title="Choose Shirt Type">
+                    <Tab eventKey="shirtType" title="Shirt Type">
                         <SplitContentBlock mt={1}
                         left={<>
                             <Card>
@@ -25,10 +25,10 @@ function CustomTabs() {
                         </>}
                         />
                     </Tab>
-                    <Tab eventKey="shirtColor" title="Choose Shirt Color">
+                    <Tab eventKey="shirtColor" title="Color">
                         color stuff
                     </Tab>
-                    <Tab eventKey="patterns" title="Premade Patterns">
+                    <Tab eventKey="patterns" title="Patterns">
                     <SplitContentBlock mt={1}
                         left={<>
                             <Card>
