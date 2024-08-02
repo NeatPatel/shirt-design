@@ -22,8 +22,7 @@ function Footer() {
                     <Row>
                         <Col className="col-6">
                             <Link to="/" className="text-decoration-none text-light">logo</Link><br />
-                            <Link to="/" className="text-decoration-none text-light"><h4>Ready Tutor</h4></Link>
-                            <p className="text-light">Our tutors are ready!</p>
+                            <Link to="/" className="text-decoration-none text-light"><h4>Soramo Design Playground</h4></Link>
                         </Col>
                         <Col>
                             <h4 className="text-light mb-3">About</h4>
@@ -33,7 +32,7 @@ function Footer() {
                         </Col>
                     </Row>
                 </Card.Header>
-                <ListGroup.Item className="text-center text-dark" variant="light">© 2024, Ready Tutor</ListGroup.Item>
+                <ListGroup.Item className="text-center text-dark" variant="light">© 2024, Soramo Design Playground</ListGroup.Item>
             </ListGroup>
         </Card>
     </>);

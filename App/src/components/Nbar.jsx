@@ -6,13 +6,13 @@ import Footer from './Footer.jsx';
 function Nbar() {
     return (<>
         <Navbar variant='dark' className="navbar-primary bg-primary border-primary" expand="lg">
-            <Container>
+            <Container fluid>
                 <Navbar.Brand>
                     <Link to="/" className="nav-link">Soramo Design Playground</Link>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="mainNavPanel" />
                 <Navbar.Collapse className="text-end" id="mainNavPanel">
-                    <Nav className="ms-auto align-items-center" navbarScroll>
+                    <Nav className="ms-auto align-items-right" navbarScroll>
                         <Link to="/about" className="nav-link">About</Link>
                         <Link to="/pricing" className="nav-link">Pricing</Link>
                         <Link to="/contact-us" className="nav-link">Editor</Link>
