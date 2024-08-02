@@ -1,11 +1,12 @@
 import styles from './customtabs.module.scss';
 import { Form, Card, Nav, Tab, Tabs, Button } from 'react-bootstrap';
-import SplitContentBlock from '../components/SplitContentBlock';
+import SplitContentBlock from './SplitContentBlock';
 
 function CustomTabs() {
     return (<>
         <Tabs defaultActiveKey="productDesign" justify>
             <Tab eventKey="productDesign" title="Product Design">
+                <p className="text-center">Select a tab to browse that category!</p>
                 <Tabs defaultActiveKey="shirtType" justify variant='pills'>
                     <Tab eventKey="shirtType" title="Shirt Type">
                         <SplitContentBlock mt={1}

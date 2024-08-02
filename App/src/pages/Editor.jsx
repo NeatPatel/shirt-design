@@ -1,6 +1,6 @@
 import { Container, Row, Col} from 'react-bootstrap';
-import ShirtCanvas from './ShirtCanvas.jsx';
-import CustomTabs from './CustomTabs.jsx';
+import ShirtCanvas from '../components/ShirtCanvas.jsx';
+import CustomTabs from '../components/CustomTabs.jsx';
 import styles from './editor.module.scss';
 
 function Editor() {

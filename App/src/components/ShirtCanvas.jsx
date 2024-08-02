@@ -4,7 +4,7 @@ import menu from '../assets/menu_hamburger.png';
 import redo from '../assets/redo.png';
 import undo from '../assets/undo.png';
 import clear from '../assets/remove.png';
-import DesignCanvas from '../components/DesignCanvas.jsx';
+import DesignCanvas from './DesignCanvas.jsx';
 import { Container, Row, Col, Card, Button, Offcanvas, Image } from 'react-bootstrap';
 
 function ShirtCanvas() {

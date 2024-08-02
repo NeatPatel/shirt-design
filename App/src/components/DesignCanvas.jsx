@@ -3,7 +3,7 @@ import styles from './designcanvas.module.scss';
 import { Container } from 'react-bootstrap';
 import { useWindowSize } from '../components/useWindowSize.jsx';
 import shirt from '../assets/shirt.svg';
-import { Canvas, FabricImage, Rect, util } from 'fabric';
+import { Canvas, FabricImage, Rect } from 'fabric';
 
 function DesignCanvas() {
     const canvasRef = useRef(null);
@@ -83,6 +83,7 @@ function DesignCanvas() {
                 if(e.keyCode == 8 || e.keyCode == 46) {
                     // Press "Backspace" or "Delete"
                     canvas.remove(canvas.getActiveObject());
+                    canvas.requestRenderAll();
                     save();
                 } else if(e.keyCode == 27) {
                     // Press "Esc"
@@ -104,7 +105,7 @@ function DesignCanvas() {
                         let pasted = await pasteShape.clone();
                         canvas.add(pasted);
                         canvas.setActiveObject(pasted);
-                        canvas.renderAll();
+                        canvas.requestRenderAll();
                         pasteShape.set({
                             left: (pasteShape.left + 3),
                             top: (pasteShape.top + 3)
@@ -116,7 +117,7 @@ function DesignCanvas() {
                     if(canvas.getActiveObject()) {
                         pasteShape = canvas.getActiveObject();
                         canvas.remove(pasteShape);
-                        canvas.renderAll();
+                        canvas.requestRenderAll();
                         save();
                     }
                 }
@@ -133,16 +134,10 @@ function DesignCanvas() {
             redoButton.addEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
             clearButton.addEventListener("click", () => clearObjects());
 
-            window.onload = () => {
-                window.addEventListener("beforeunload", (e) => {
-                    if(undoStates.length == 0) return undefined;
-
-                    let confirmMsg = "Are you sure you want to leave?\nYou have unsaved changes.";
-
-                    (e || window.event).returnValue = confirmMsg;
-                    return confirmMsg;
-                });
-            };
+            window.addEventListener("beforeunload", (e) => {
+                if(undoStates.length == 0) return;
+                e.preventDefault();
+            });
             // End Event Listeners
 
             // Remove Event Listeners (if any)
@@ -217,10 +212,11 @@ function DesignCanvas() {
     }
 
     function clearObjects() {
+        if(canvas.getObjects().length) save();
+        
         canvas.forEachObject((obj) => {
             canvas.remove(obj);
         });
-        save();
     }
 
     const addRect = () => {
@@ -233,6 +229,7 @@ function DesignCanvas() {
         });
 
         canvas.add(rect);
+        canvas.requestRenderAll();
         save();
     };
 
