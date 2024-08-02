@@ -199,17 +199,25 @@ function DesignCanvas() {
         currentState = JSON.stringify(canvas);
     }
 
-    async function uploadImage() {
+    function uploadImage() {
         if(uploadSrc.value) {
-            const img = await FabricImage.fromURL(uploadSrc.value);
-            img.scaleToWidth(100);
-            img.set({
-                left: 100,
-                top: 50
-            });
-            canvas.add(img);
-            canvas.requestRenderAll();
-            save();
+            let fReader = new FileReader();
+
+            let fileType = uploadSrc.files[0].type;
+            if(fileType == "image/apng" || fileType == "image/png" || fileType == "image/avif" || fileType == "image/jpg" || fileType == "image/svg" || fileType == "image/gif" || fileType == "image/webp") fReader.readAsDataURL(uploadSrc.files[0]);
+            else alert("Invalid File Type");
+
+            fReader.onload = async (e) => {
+                const img = await FabricImage.fromURL(e.target.result);
+                img.scaleToWidth(100);
+                img.set({
+                    left: 100,
+                    top: 50
+                });
+                canvas.add(img);
+                canvas.requestRenderAll();
+                save();
+            };
         }
     }
 
@@ -258,7 +266,7 @@ function DesignCanvas() {
 
     return (<>
         <Container fluid className={styles.canvasDiv + " m-auto d-flex"}>
-            <div style={{backgroundColor: "#dddddd"}} className={styles.img + " m-auto d-flex justify-content-center align-items-center"}>
+            <div style={{backgroundColor: "#dddddd"}} className={styles.img + " m-auto d-flex justify-content-center align-items-center rounded"}>
                 <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />
             </div>
         </Container>
