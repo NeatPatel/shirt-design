@@ -15,9 +15,13 @@ function DesignCanvas() {
     let currentState;
     let undoStates = [];
     let redoStates = [];
+
+    // Buttons/Elements
     let redoButton;
     let undoButton;
     let clearButton;
+    let uploadButton;
+    let uploadSrc;
 
     const { windowWidth, windowHeight } = useWindowSize();
     // Basically says: if the window height > window width, scale down (otherwise regular size)
@@ -46,7 +50,7 @@ function DesignCanvas() {
 
             const setup = () => {
                 try {
-                    loadImg();
+                    loadBgImg();
                 } catch(err) {
                     console.log("ERROR: Background Image Not Loaded");
                 }
@@ -67,7 +71,7 @@ function DesignCanvas() {
             // Create Background Image
             const setup = () => {
                 try {
-                    loadImg();
+                    loadBgImg();
 
                     save();
                 } catch(err) {
@@ -132,7 +136,8 @@ function DesignCanvas() {
             window.addEventListener("keydown", onKeyDown);
             undoButton.addEventListener("click", () => replayState(undoStates, redoStates, redoButton, undoButton));
             redoButton.addEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
-            clearButton.addEventListener("click", () => clearObjects());
+            clearButton.addEventListener("click", clearObjects);
+            uploadButton.addEventListener("click", uploadImage);
 
             window.addEventListener("beforeunload", (e) => {
                 if(undoStates.length == 0) return;
@@ -144,7 +149,8 @@ function DesignCanvas() {
             return () => {
                 undoButton.removeEventListener("click", () => replayState(undoStates, redoStates, redoButton, undoButton));
                 redoButton.removeEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
-                clearButton.removeEventListener("click", () => clearObjects());
+                clearButton.removeEventListener("click", clearObjects);
+                uploadButton.addEventListener("click", uploadImage);
                 window.removeEventListener("keydown", onKeyDown);
             }
         }
@@ -169,11 +175,11 @@ function DesignCanvas() {
             canvas.requestRenderAll();
             if(canvas.clipPath) {
                 canvas.clipPath = null;
-                loadImg();
+                loadBgImg();
             }
         });
 
-        loadImg();
+        loadBgImg();
 
         onButton.disabled = false;
         if(playStack.length) {
@@ -193,7 +199,17 @@ function DesignCanvas() {
         currentState = JSON.stringify(canvas);
     }
 
-    async function loadImg() {
+    async function uploadImage() {
+        if(uploadSrc.value) {
+            const img = await FabricImage.fromURL(uploadSrc.value);
+            img.scaleToWidth(100);
+            canvas.add(img);
+            canvas.requestRenderAll();
+            save();
+        }
+    }
+
+    async function loadBgImg() {
         const img = await FabricImage.fromURL(shirt);
         img.scaleToWidth(canvasWidth);
         canvas.add(img);
@@ -203,12 +219,15 @@ function DesignCanvas() {
         canvas.remove(shape);
         canvas.clipPath = shape;
         canvas.clipPath.fixed = true;
+        canvas.requestRenderAll();
     }
 
     function setEditorIds() {
         redoButton = document.getElementById("redo");
         undoButton = document.getElementById("undo");
         clearButton = document.getElementById("clear");
+        uploadButton = document.getElementById("uploadButton");
+        uploadSrc = document.getElementById("uploadSrc");
     }
 
     function clearObjects() {
