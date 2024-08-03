@@ -1,4 +1,4 @@
-import styles from './home.module.scss';
+import styles from './contact.module.scss';
 
 import ContentBlock from '../components/ContentBlock.jsx';
 import SplitBlock from '../components/SplitBlock.jsx';
@@ -7,10 +7,10 @@ import TripleBlock from '../components/TripleBlock.jsx';
 import { Button, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-function Home(){
+function Contact(){
     return (<>
-        <h1>hello world</h1>
+        <h1>hello us ig</h1>
     </>)
 }
 
-export default Home
+export default Contact

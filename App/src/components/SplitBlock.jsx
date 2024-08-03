@@ -1,4 +1,4 @@
-import styles from './splitcontentblock.module.scss';
+import styles from './splitblock.module.scss';
 import {Row, Col, Container} from 'react-bootstrap';
 
 /*
@@ -9,10 +9,10 @@ props.mt is top margin in svh
 props.mb is bottom margin in svh
 
 EXAMPLE:
-<SplitContentBlock left={<h2 className= 'text-center'>Why Wait? Get a Free Consultation Today!</h2>} right={<img src= {waggImg} height='auto' width='500svh' className="" />}/>
+<SplitBlock left={<h2 className= 'text-center'>Why Wait? Get a Free Consultation Today!</h2>} right={<img src= {waggImg} height='auto' width='500svh' className="" />}/>
 */
 
-function SplitContentBlock(props){
+function SplitBlock(props){
     return(<>
     <Container className='d-flex' fluid>
         <Row className= 'w-100 text-center mx-auto' style={{marginTop: `${props.mt}svh`, marginBottom: `${props.mb}svh`}}>
@@ -22,4 +22,4 @@ function SplitContentBlock(props){
     </Container>
     </>)
 }
-export default SplitContentBlock;
+export default SplitBlock;

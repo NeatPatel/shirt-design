@@ -26,13 +26,13 @@ function Footer() {
                         </Col>
                         <Col>
                             <h4 className="text-light mb-3">Privacy</h4>
-                            <Link to="/privacy-policy" className="text-decoration-none text-light"><p>Privacy Policy</p></Link>
-                            <Link to="/terms-and-conditions" className="text-decoration-none text-light"><p>Terms and Conditions</p></Link>
-                            <Link to="/contact-us" className="text-decoration-none text-light"><p>Contact Us</p></Link>
+                            <Link to="/privacy" className="text-decoration-none text-light"><p>Privacy Policy</p></Link>
+                            <Link to="/terms" className="text-decoration-none text-light"><p>Terms and Conditions</p></Link>
+                            <Link to="/contact" className="text-decoration-none text-light"><p>Contact Us</p></Link>
                         </Col>
                     </Row>
                 </Card.Header>
-                <ListGroup.Item className="text-center text-dark" variant="light">© 2024, Soramo Design Playground</ListGroup.Item>
+                <ListGroup.Item className="text-center text-dark" variant="secondary">© 2024, Soramo Design Playground</ListGroup.Item>
             </ListGroup>
         </Card>
     </>);
