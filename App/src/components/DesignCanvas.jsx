@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import styles from './designcanvas.module.scss';
 import { Container } from 'react-bootstrap';
-import { useWindowSize } from '../components/useWindowSize.jsx';
 import shirtF from '../assets/shirtFront.svg';
 import shirtB from '../assets/shirtBack.svg';
 import shirtL from '../assets/shirtLeft.svg';
