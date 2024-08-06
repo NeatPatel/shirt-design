@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import styles from './designcanvas.module.scss';
 import { Container } from 'react-bootstrap';
 import { useWindowSize } from '../components/useWindowSize.jsx';
@@ -8,19 +8,20 @@ import shirtL from '../assets/shirtLeft.svg';
 import shirtR from '../assets/shirtRight.svg';
 import { Canvas, FabricImage, Rect } from 'fabric';
 
-function DesignCanvas() {
+const DesignCanvas = forwardRef((props, ref) => {
+    // F, B, L, R means Front, Back, Left, Right (respectively)
     const canvasRefF = useRef(null);
     const canvasRefB = useRef(null);
     const canvasRefL = useRef(null);
     const canvasRefR = useRef(null);
 
-    // F, B, L, R means Front, Back, Left, Right respectively
+    // Set Canvas variables and current canvas View (default front)
     const [ canvasF, setCanvasF ] = useState(null);
     const [ canvasB, setCanvasB ] = useState(null);
     const [ canvasL, setCanvasL ] = useState(null);
     const [ canvasR, setCanvasR ] = useState(null);
-    let canvas;
     let canvasView = "F";
+    let canvas;
 
     let pasteShape;
 
@@ -35,8 +36,8 @@ function DesignCanvas() {
     let redoR = [];
 
     let currentState;
-    let undoStates = undoF;
-    let redoStates = redoF;
+    let undoStates = [];
+    let redoStates = [];
 
     // Buttons/Elements
     let redoButton;
@@ -49,26 +50,49 @@ function DesignCanvas() {
     let divL;
     let divR;
 
+    // Window Width and Height
     const { windowWidth, windowHeight } = useWindowSize();
     // Basically says: if the window height > window width, scale down (otherwise regular size)
     const canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
     const canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
 
-    // Create Canvases
+    // Public Methods for use in ShirtCanvas.jsx (the parent of this component)
+    useImperativeHandle(ref, () => ({
+        changeCanvasButton(newView) {
+            changeCanvasView(newView);
+        }
+    }));
+
+    // Run necesities needed on any re-render
     useEffect(() => {
+        // Reset HTML elements on editor
         setEditorIds();
 
+        // Make sure canvas is set properly
+        if(canvasView == "F") canvas = canvasF;
+        else if(canvasView == "B") canvas = canvasB;
+        else if(canvasView == "L") canvas = canvasL;
+        else if(canvasView == "R") canvas = canvasR;
+
+        console.log("re-render");
+    });
+
+    // Create Canvases
+    useEffect(() => {
+        // Create canvas instances based on the 4 canvas HTML elements
         const canvasInstanceF = new Canvas(canvasRefF.current);
         const canvasInstanceB = new Canvas(canvasRefB.current);
         const canvasInstanceL = new Canvas(canvasRefL.current);
         const canvasInstanceR = new Canvas(canvasRefR.current);
 
+        // set States (causes a singular re-render)
         setCanvasF(canvasInstanceF);
         setCanvasB(canvasInstanceB);
         setCanvasL(canvasInstanceL);
         setCanvasR(canvasInstanceR);
 
         return () => {
+            // Dispose when done
            canvasInstanceF.dispose();
            canvasInstanceB.dispose();
            canvasInstanceL.dispose();
@@ -78,19 +102,20 @@ function DesignCanvas() {
 
     // Change Canvas and contents based on screen size
     useEffect(() => {
-        if(canvasF) canvas = canvasF;
+        // Set canvas properly after state change
+        if(canvasView == "F" && canvasF) canvas = canvasF;
+        else if(canvasView == "B" && canvasB) canvas = canvasB;
+        else if(canvasView == "L" && canvasL) canvas = canvasL;
+        else if(canvasView == "R" && canvasR) canvas = canvasR;
 
+        // Recalculate canvas settings
         if(canvas) {
             setCanvasSize();
 
             setEditorIds();
 
             const setup = () => {
-                try {
-                    loadBgImg();
-                } catch(err) {
-                    console.log("ERROR: Background Image Not Loaded");
-                }
+                loadBgImg();
             };
 
             setTimeout(() => setup(), 100);
@@ -99,8 +124,13 @@ function DesignCanvas() {
 
     // Initialize Canvas Settings
     useEffect(() => {
-        if(canvasF) canvas = canvasF;
+        // Set canvas properly
+        if(canvasView == "F" && canvasF) canvas = canvasF;
+        else if(canvasView == "B" && canvasB) canvas = canvasB;
+        else if(canvasView == "L" && canvasL) canvas = canvasL;
+        else if(canvasView == "R" && canvasR) canvas = canvasR;
 
+        // Initialize all canvas settings
         if(canvas) {
             setEditorIds();
 
@@ -170,8 +200,11 @@ function DesignCanvas() {
             }
             // End keydown Events
 
-            // Undo/Redo Events
-            canvas.on("object:modified", () => save());
+            // Undo/Redo Events (one for each canvas)
+            canvasF.on("object:modified", () => save());
+            canvasB.on("object:modified", () => save());
+            canvasL.on("object:modified", () => save());
+            canvasR.on("object:modified", () => save());
             // End Undo/Redo Events
 
             // Event Listeners
@@ -182,7 +215,7 @@ function DesignCanvas() {
             uploadButton.addEventListener("click", uploadImage);
 
             window.addEventListener("beforeunload", (e) => {
-                if(undoStates.length == 0) return;
+                if(undoStates.length == 0 && redoStates.length == 0) return;
                 e.preventDefault();
             });
             // End Event Listeners
@@ -192,15 +225,14 @@ function DesignCanvas() {
                 undoButton.removeEventListener("click", () => replayState(undoStates, redoStates, redoButton, undoButton));
                 redoButton.removeEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
                 clearButton.removeEventListener("click", clearObjects);
-                uploadButton.addEventListener("click", uploadImage);
+                uploadButton.removeEventListener("click", uploadImage);
                 window.removeEventListener("keydown", onKeyDown);
             }
         }
-    }, [canvasF]);
+    }, [canvasF, canvasB, canvasL, canvasR]);
     
+    // Handling Undo/Redo Events
     function replayState(playStack, saveStack, onButton, offButton) {
-        console.log();
-
         saveStack.push(currentState);
         currentState = playStack.pop();
     
@@ -208,6 +240,7 @@ function DesignCanvas() {
         onButton.disabled = true;
         offButton.disabled = true;
         
+        // Clear canvas, load the playStack state in
         canvas.clear();
         canvas.loadFromJSON(currentState, () => {
             canvas.setWidth(canvasWidth);
@@ -221,34 +254,50 @@ function DesignCanvas() {
             }
         });
 
+        // Ensure bg img is reset
         loadBgImg();
 
+        // Reset undo/redo buttons
         onButton.disabled = false;
         if(playStack.length) {
             offButton.disabled = false;
         }
     }
     
+    // save function
+    // call for ALL canvas updates
     function save() {
+        // Reset undo since new change made
         redoStates = [];
         redoButton.disabled = true;
         
+        // If the currentState exists,
+        // add it to undoStates
         if(currentState) {
             undoStates.push(currentState);
             undoButton.disabled = false;
         }
 
+        // Initialize/redefine currentState
         currentState = JSON.stringify(canvas);
     }
 
+    // Uploading a user image
     function uploadImage() {
+        // Check if src exists
         if(uploadSrc.value) {
+            // Implement FileReader API to read the file
             let fReader = new FileReader();
 
             let fileType = uploadSrc.files[0].type;
-            if(fileType == "image/apng" || fileType == "image/png" || fileType == "image/avif" || fileType == "image/jpg" || fileType == "image/svg" || fileType == "image/gif" || fileType == "image/webp") fReader.readAsDataURL(uploadSrc.files[0]);
-            else alert("Invalid File Type");
+            if(fileType == "image/apng" || fileType == "image/png" || fileType == "image/avif" || fileType == "image/jpg" || fileType == "image/svg" || fileType == "image/gif" || fileType == "image/webp") {
+                fReader.readAsDataURL(uploadSrc.files[0]);
+            } else {
+                alert("Invalid File Type");
+                return;
+            }
 
+            // Load the file if applicable
             fReader.onload = async (e) => {
                 const img = await FabricImage.fromURL(e.target.result);
                 img.scaleToWidth(100);
@@ -263,6 +312,7 @@ function DesignCanvas() {
         }
     }
 
+    // Load in the background image
     async function loadBgImg() {
         // Front
         const imgF = await FabricImage.fromURL(shirtF);
@@ -313,7 +363,9 @@ function DesignCanvas() {
         canvasR.requestRenderAll();
     }
 
+    // Set the canvas size accordingly
     function setCanvasSize() {
+        // One for each canvas
         canvasF.setWidth(canvasWidth);
         canvasF.setHeight(canvasHeight);
         canvasF.calcOffset();
@@ -331,6 +383,7 @@ function DesignCanvas() {
         canvasR.calcOffset();
     }
 
+    // Set the HTML elements based on "id"
     function setEditorIds() {
         redoButton = document.getElementById("redo");
         undoButton = document.getElementById("undo");
@@ -342,18 +395,76 @@ function DesignCanvas() {
         divL = document.getElementById("canvasL");
         divR = document.getElementById("canvasR");
 
+        // change display of the divs based on canvasView
         divF.style.display = (canvasView == "F") ? "inline" : "none";
         divB.style.display = (canvasView == "B") ? "inline" : "none";
         divL.style.display = (canvasView == "L") ? "inline" : "none";
         divR.style.display = (canvasView == "R") ? "inline" : "none";
     }
 
+    // change the current canvasView (front, back, left, right, etc.)
+    function changeCanvasView(newView) {
+        if(canvasView != newView) {
+            canvas.discardActiveObject();
+
+            if(canvasView == "F") {
+                undoF = [...undoStates];
+                redoF = [...redoStates];
+            } else if(canvasView == "B") {
+                undoB = [...undoStates];
+                redoB = [...redoStates];
+            } else if(canvasView == "L") {
+                undoL = [...undoStates];
+                redoL = [...redoStates];
+            } else if(canvasView == "R") {
+                undoR = [...undoStates];
+                redoR = [...redoStates];
+            }
+
+            if(newView == "F") {
+                canvas = canvasF;
+                undoStates = [...undoF];
+                redoStates = [...redoF];
+            } else if(newView == "B") {
+                canvas = canvasB;
+                undoStates = [...undoB];
+                redoStates = [...redoB];
+            } else if(newView == "L") {
+                canvas = canvasL;
+                undoStates = [...undoL];
+                redoStates = [...redoL];
+            } else if(newView == "R") {
+                canvas = canvasR;
+                undoStates = [...undoR];
+                redoStates = [...redoR];
+            }
+
+            currentState = JSON.stringify(canvas);
+
+            undoButton.disabled = (undoStates.length == 0) ? true : false;
+            redoButton.disabled = (redoStates.length == 0) ? true : false;
+            canvas.discardActiveObject();
+            canvas.requestRenderAll();
+
+            canvasView = newView;
+
+            setEditorIds();
+        }
+    } 
+
+    // Clear objects from current canvas
     function clearObjects() {
-        if(canvas.getObjects().length) save();
-        
+        // enable saving if something is there to erase
+        let erase = false;
+        if(canvas.getObjects().length) erase = true;
+
+        // remove each object
         canvas.forEachObject((obj) => {
             canvas.remove(obj);
         });
+
+        // save if something was erased
+        if(erase) save();
     }
 
     const addRect = () => {
@@ -389,6 +500,6 @@ function DesignCanvas() {
         </Container>
         <button onClick={addRect}>Width: {windowWidth} and Height: {windowHeight} </button>
     </>);
-}
+});
 
 export default DesignCanvas;

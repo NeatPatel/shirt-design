@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './shirtcanvas.module.scss';
-import menu from '../assets/menu_hamburger.png';
+import shirtF from '../assets/shirtFront.svg';
+import shirtB from '../assets/shirtBack.svg';
+import shirtL from '../assets/shirtLeft.svg';
+import shirtR from '../assets/shirtRight.svg';
 import redo from '../assets/redo.png';
 import undo from '../assets/undo.png';
 import clear from '../assets/remove.png';
@@ -10,8 +13,20 @@ import { Container, Row, Col, Card, Button, Offcanvas, Image } from 'react-boots
 function ShirtCanvas() {
     const [show, setShow] = useState(false);
 
+    const [ canvasF, setCanvasF ] = useState(null);
+    const designCanvasRef = useRef(null);
+
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+    
+    useEffect(() => {
+
+    }, [canvasF]);
+
+    const handleCloseChange = (str) => {
+        handleClose();
+        designCanvasRef.current.changeCanvasButton(str);
+    };
 
     return (<>
         <Card className={styles.bgImg + " shadow"}>
@@ -29,8 +44,17 @@ function ShirtCanvas() {
                         </Button>
                     </Col>
                     <Col className="text-end">
-                        <Button className="ms-auto me-2 my-2 p-1"  variant="light" onClick={handleShow} title="Shirt Angle">
-                            <Image className="pe-none" src={menu} width="50svh" height="50svh" />
+                        <Button className="my-2 me-1" variant="primary" size="lg" title="Shirt Front" onClick={() => handleCloseChange("F")}>
+                            <Image className="pe-none" src={shirtF} width="30svh" height="35svh"  />
+                        </Button>
+                        <Button className="my-2 me-1" variant="primary" size="lg" title="Shirt Back" onClick={() => handleCloseChange("B")}>
+                            <Image className="pe-none" src={shirtB} width="30svh" height="35svh"  />
+                        </Button>
+                        <Button className="my-2 me-1" variant="primary" size="lg" title="Shirt Left" onClick={() => handleCloseChange("L")}>
+                            <Image className="pe-none" src={shirtL} width="30svh" height="35svh"  />
+                        </Button>
+                        <Button className="my-2 me-auto" variant="primary" size="lg" title="Shirt Right" onClick={() => handleCloseChange("R")}>
+                            <Image className="pe-none" src={shirtR} width="30svh" height="35svh"  />
                         </Button>
                     </Col>
                 </Row>
@@ -41,14 +65,11 @@ function ShirtCanvas() {
                     <Offcanvas.Title>Shirt View</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    <Button className="w-100 mb-4" variant="outline-secondary" size="lg">Front View</Button>
-                    <Button className="w-100 mb-4" variant="outline-secondary" size="lg">Back View</Button>
-                    <Button className="w-100 mb-4" variant="outline-secondary" size="lg">Left Sleeve View</Button>
-                    <Button className="w-100 mb-4" variant="outline-secondary" size="lg">Right Sleeve View</Button>
+                    
                 </Offcanvas.Body>
             </Offcanvas>
 
-            <DesignCanvas />
+            <DesignCanvas ref={designCanvasRef} />
 
             <Button variant="primary" size="lg" className="ms-auto mb-2 me-2 bottom-0 right-0">Save</Button>
         </Card>
