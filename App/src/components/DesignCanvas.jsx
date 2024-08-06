@@ -58,7 +58,13 @@ const DesignCanvas = forwardRef((props, ref) => {
 
     // Basically says: if the window height > window width, scale down (otherwise regular size)
     let canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
-    let canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+    let canvasHeight = canvasWidth;
+    
+    // Base canvasWidth/Height values to reference
+    let cBase = ((windowHeight) > (windowWidth) ? (1280 * 0.75) : (585 * 0.65));
+
+    // Constant to scale sprite sizes by
+    let scaleFactor = canvasWidth / cBase;
 
     // Public Methods for use in ShirtCanvas.jsx (the parent of this component)
     useImperativeHandle(ref, () => ({
@@ -77,8 +83,6 @@ const DesignCanvas = forwardRef((props, ref) => {
         else if(canvasView == "B") canvas = canvasB;
         else if(canvasView == "L") canvas = canvasL;
         else if(canvasView == "R") canvas = canvasR;
-
-        console.log("re-render");
     });
 
     // Create Canvases
@@ -161,6 +165,7 @@ const DesignCanvas = forwardRef((props, ref) => {
                     // Press "V"
                     if(pasteShape) {
                         let pasted = await pasteShape.clone();
+                        scaleObject(pasted);
                         canvas.add(pasted);
                         canvas.setActiveObject(pasted);
                         canvas.requestRenderAll();
@@ -201,14 +206,23 @@ const DesignCanvas = forwardRef((props, ref) => {
                 e.preventDefault();
             });
 
-            window.addEventListener("resize", (e) => {
+            window.addEventListener("resize", () => {
                 windowWidth = window.innerWidth;
                 windowHeight = window.innerHeight;
 
+                const oldScaleFactor = scaleFactor;
+
                 canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
-                canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+                canvasHeight = canvasWidth;
+
+                cBase = ((windowHeight) > (windowWidth) ? (1280 * 0.75) : (585 * 0.65));
+                // Temporarily change scaleFactor for scaling current items
+                scaleFactor = (canvasWidth / cBase) / oldScaleFactor;
 
                 canvasResize();
+
+                // reset scaleFactor to normal
+                scaleFactor = canvasWidth / cBase;
             });
             // End Event Listeners
 
@@ -219,15 +233,7 @@ const DesignCanvas = forwardRef((props, ref) => {
                 clearButton.removeEventListener("click", clearObjects);
                 uploadButton.removeEventListener("click", uploadImage);
                 window.removeEventListener("keydown", onKeyDown);
-                window.removeEventListener("resize", (e) => {
-                    windowWidth = window.innerWidth;
-                    windowHeight = window.innerHeight;
-    
-                    canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
-                    canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
-    
-                    canvasResize();
-                });
+                window.removeEventListener("resize", () => {});
             }
         }
     }, [canvasF, canvasB, canvasL, canvasR]);
@@ -328,6 +334,7 @@ const DesignCanvas = forwardRef((props, ref) => {
                     left: 100,
                     top: 50
                 });
+                scaleObject(img);
                 canvas.add(img);
                 canvas.requestRenderAll();
                 save();
@@ -391,19 +398,47 @@ const DesignCanvas = forwardRef((props, ref) => {
         // One for each canvas
         canvasF.setWidth(canvasWidth);
         canvasF.setHeight(canvasHeight);
+
+        canvasF.forEachObject((obj) => {
+            scaleObject(obj);
+        });
+
         canvasF.calcOffset();
 
         canvasB.setWidth(canvasWidth);
         canvasB.setHeight(canvasHeight);
+
+        canvasB.forEachObject((obj) => {
+            scaleObject(obj);
+        });
+
         canvasB.calcOffset();
 
         canvasL.setWidth(canvasWidth);
         canvasL.setHeight(canvasHeight);
+
+        canvasL.forEachObject((obj) => {
+            scaleObject(obj);
+        });
+
         canvasL.calcOffset();
 
         canvasR.setWidth(canvasWidth);
         canvasR.setHeight(canvasHeight);
+
+        canvasR.forEachObject((obj) => {
+            scaleObject(obj);
+        });
+
         canvasR.calcOffset();
+    }
+
+    // Scale an object according to window size
+    function scaleObject(obj) {
+        obj.set({
+            scaleX: obj.scaleX * scaleFactor,
+            scaleY: obj.scaleY * scaleFactor
+        });
     }
 
     // Set the HTML elements based on "id"
@@ -498,6 +533,8 @@ const DesignCanvas = forwardRef((props, ref) => {
             width: 150,
             height: 100
         });
+
+        scaleObject(rect);
 
         canvas.add(rect);
         canvas.requestRenderAll();

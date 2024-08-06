@@ -49,7 +49,7 @@ function CustomTabs() {
                     </Tab>
                 </Tabs>    
             </Tab>
-            <Tab eventKey="shapesArt" title="Shapes and Art">
+            <Tab eventKey="shapesArt" title="Shapes, Art & Text">
                 <p className="text-center">Select a tab to browse that category!</p>
                 <Tabs justify variant='pills'>
                     <Tab eventKey="shape1" title="Shape1">
