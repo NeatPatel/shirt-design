@@ -111,7 +111,7 @@ function CustomTabs() {
             <Tab eventKey="uploadTab" title="Upload an Image">
                 <Form.Group className="mb-3 text-center mt-3">
                     <Form.Label>Upload File</Form.Label>
-                    <Form.Control id="uploadSrc" type="file" />
+                    <Form.Control id="uploadSrc" type="file" accept="image/png,image/jpg,image/webp,image/svg,image/gif,image/apng,image/avif" />
                 </Form.Group>
                 <div className="text-center">
                     <Button id="uploadButton" size="lg" className="text-center">Add to Canvas</Button>
