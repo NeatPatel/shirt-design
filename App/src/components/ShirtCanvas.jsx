@@ -11,20 +11,9 @@ import DesignCanvas from './DesignCanvas.jsx';
 import { Container, Row, Col, Card, Button, Offcanvas, Image } from 'react-bootstrap';
 
 function ShirtCanvas() {
-    const [show, setShow] = useState(false);
-
-    const [ canvasF, setCanvasF ] = useState(null);
     const designCanvasRef = useRef(null);
 
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
-    
-    useEffect(() => {
-
-    }, [canvasF]);
-
     const handleCloseChange = (str) => {
-        handleClose();
         designCanvasRef.current.changeCanvasButton(str);
     };
 
@@ -47,11 +36,11 @@ function ShirtCanvas() {
                         <Button className="my-2 me-1" variant="primary" size="lg" title="Shirt Front" onClick={() => handleCloseChange("F")}>
                             <Image className="pe-none" src={shirtF} width="30svh" height="35svh"  />
                         </Button>
-                        <Button className="my-2 me-1" variant="primary" size="lg" title="Shirt Back" onClick={() => handleCloseChange("B")}>
-                            <Image className="pe-none" src={shirtB} width="30svh" height="35svh"  />
-                        </Button>
                         <Button className="my-2 me-1" variant="primary" size="lg" title="Shirt Left" onClick={() => handleCloseChange("L")}>
                             <Image className="pe-none" src={shirtL} width="30svh" height="35svh"  />
+                        </Button>
+                        <Button className="my-2 me-1" variant="primary" size="lg" title="Shirt Back" onClick={() => handleCloseChange("B")}>
+                            <Image className="pe-none" src={shirtB} width="30svh" height="35svh"  />
                         </Button>
                         <Button className="my-2 me-auto" variant="primary" size="lg" title="Shirt Right" onClick={() => handleCloseChange("R")}>
                             <Image className="pe-none" src={shirtR} width="30svh" height="35svh"  />
@@ -59,15 +48,6 @@ function ShirtCanvas() {
                     </Col>
                 </Row>
             </Container>
-
-            <Offcanvas show={show} onHide={handleClose} placement="end">
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Shirt View</Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>
-                    
-                </Offcanvas.Body>
-            </Offcanvas>
 
             <DesignCanvas ref={designCanvasRef} />
 

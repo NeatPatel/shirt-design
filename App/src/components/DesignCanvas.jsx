@@ -51,10 +51,14 @@ const DesignCanvas = forwardRef((props, ref) => {
     let divR;
 
     // Window Width and Height
-    const { windowWidth, windowHeight } = useWindowSize();
+    let { windowWidth, windowHeight } = {
+        windowWidth: window.innerWidth,
+        windowHeight: window.innerHeight
+    };
+
     // Basically says: if the window height > window width, scale down (otherwise regular size)
-    const canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
-    const canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+    let canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+    let canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
 
     // Public Methods for use in ShirtCanvas.jsx (the parent of this component)
     useImperativeHandle(ref, () => ({
@@ -99,28 +103,6 @@ const DesignCanvas = forwardRef((props, ref) => {
            canvasInstanceR.dispose();
         };
     }, []);
-
-    // Change Canvas and contents based on screen size
-    useEffect(() => {
-        // Set canvas properly after state change
-        if(canvasView == "F" && canvasF) canvas = canvasF;
-        else if(canvasView == "B" && canvasB) canvas = canvasB;
-        else if(canvasView == "L" && canvasL) canvas = canvasL;
-        else if(canvasView == "R" && canvasR) canvas = canvasR;
-
-        // Recalculate canvas settings
-        if(canvas) {
-            setCanvasSize();
-
-            setEditorIds();
-
-            const setup = () => {
-                loadBgImg();
-            };
-
-            setTimeout(() => setup(), 100);
-        }
-    }, [canvasWidth, canvasHeight]);
 
     // Initialize Canvas Settings
     useEffect(() => {
@@ -215,8 +197,18 @@ const DesignCanvas = forwardRef((props, ref) => {
             uploadButton.addEventListener("click", uploadImage);
 
             window.addEventListener("beforeunload", (e) => {
-                if(undoStates.length == 0 && redoStates.length == 0) return;
+                if(undoF.length == 0 && redoF.length == 0 && undoB == 0 && redoB == 0 && undoL == 0 && redoL == 0 && undoR == 0 && redoR == 0) return;
                 e.preventDefault();
+            });
+
+            window.addEventListener("resize", (e) => {
+                windowWidth = window.innerWidth;
+                windowHeight = window.innerHeight;
+
+                canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+                canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+
+                canvasResize();
             });
             // End Event Listeners
 
@@ -227,9 +219,40 @@ const DesignCanvas = forwardRef((props, ref) => {
                 clearButton.removeEventListener("click", clearObjects);
                 uploadButton.removeEventListener("click", uploadImage);
                 window.removeEventListener("keydown", onKeyDown);
+                window.removeEventListener("resize", (e) => {
+                    windowWidth = window.innerWidth;
+                    windowHeight = window.innerHeight;
+    
+                    canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+                    canvasHeight = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+    
+                    canvasResize();
+                });
             }
         }
     }, [canvasF, canvasB, canvasL, canvasR]);
+
+    // Change Canvas and contents based on screen size
+    const canvasResize = () => {
+        // Set canvas properly after state change
+        if(canvasView == "F" && canvasF) canvas = canvasF;
+        else if(canvasView == "B" && canvasB) canvas = canvasB;
+        else if(canvasView == "L" && canvasL) canvas = canvasL;
+        else if(canvasView == "R" && canvasR) canvas = canvasR;
+
+        // Recalculate canvas settings
+        if(canvas) {
+            setCanvasSize();
+
+            setEditorIds();
+
+            const setup = () => {
+                loadBgImg();
+            };
+
+            setTimeout(() => setup(), 100);
+        }
+    };
     
     // Handling Undo/Redo Events
     function replayState(playStack, saveStack, onButton, offButton) {
