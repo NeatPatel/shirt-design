@@ -82,6 +82,8 @@ const DesignCanvas = forwardRef((props, ref) => {
         else if(canvasView == "B") canvas = canvasB;
         else if(canvasView == "L") canvas = canvasL;
         else if(canvasView == "R") canvas = canvasR;
+
+        console.log("re-render");
     });
 
     // Create Canvases
@@ -200,8 +202,19 @@ const DesignCanvas = forwardRef((props, ref) => {
             clearButton.addEventListener("click", clearObjects);
             uploadButton.addEventListener("click", uploadImage);
 
+            const allLinks = document.querySelectorAll("a");
+
+            allLinks.forEach((a) => {
+                a.addEventListener("click", (e) => {
+                    if(!(undoStates == 0 && redoStates == 0 && undoF.length == 0 && redoF.length == 0 && undoB.length == 0 && redoB.length == 0 && undoL.length == 0 && redoL.length == 0 && undoR.length == 0 && redoR.length == 0)) {
+                        e.preventDefault();
+                        confirm("You have unsaved changes, are you sure?");
+                    }
+                });
+            });
+
             window.addEventListener("beforeunload", (e) => {
-                if(undoF.length == 0 && redoF.length == 0 && undoB == 0 && redoB == 0 && undoL == 0 && redoL == 0 && undoR == 0 && redoR == 0) return;
+                if(undoStates == 0 && redoStates == 0 && undoF.length == 0 && redoF.length == 0 && undoB.length == 0 && redoB.length == 0 && undoL.length == 0 && redoL.length == 0 && undoR.length == 0 && redoR.length == 0) return;
                 e.preventDefault();
             });
 

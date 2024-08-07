@@ -12,20 +12,20 @@ import shirt from '../assets/shirt.png';
 function Pricing(){
     return (<>
         <ContentBlock content={<>
-            <h1 class="display-1">Pricing</h1>
+            <h1 className="display-1">Pricing</h1>
         </>} mt="15" mb="15" />
 
 
         <SplitBlock 
             left={<>
-                <h1 class="text-primary">T-Shirts</h1>
+                <h1 className="text-primary">T-Shirts</h1>
                 <Image src={shirt}/>
                 <h3>Individual:$</h3>
                 <h3>Bulk (20 or more):$$</h3>
             </>}
             
             right={<>
-                <h1 class="text-primary">Hoodies</h1>
+                <h1 className="text-primary">Hoodies</h1>
                 <p>placeholder for hoodie image</p>
                 <h3>Individual:$</h3>
                 <h3>Bulk (20 or more):$$</h3>
@@ -36,7 +36,7 @@ function Pricing(){
         />
 
         <ContentBlock content={<>
-            <h5 class="text-dark">additional charge message/shipping handling</h5>
+            <h5 className="text-dark">additional charge message/shipping handling</h5>
         </>} mt="15" mb="15" />
 
     </>)

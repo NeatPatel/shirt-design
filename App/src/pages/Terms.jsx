@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 function Terms(){
     return (<>
         <ContentBlock content={<>
-            <h1 class="display-1">Terms and Conditions</h1>
+            <h1 className="display-1">Terms and Conditions</h1>
         </>} mt="15" mb="15" />
 
         <ContentBlock content={<>

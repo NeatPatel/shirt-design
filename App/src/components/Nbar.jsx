@@ -1,6 +1,6 @@
 import styles from './navbar.module.scss';
 import { Link, Outlet } from 'react-router-dom';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 import Footer from './Footer.jsx';
 import logo from '../assets/SoramoLogo.png'
 

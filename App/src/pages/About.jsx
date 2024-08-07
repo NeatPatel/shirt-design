@@ -12,7 +12,7 @@ import shirt from '../assets/shirt.png';
 function About(){
     return (<>
         <ContentBlock content={<>
-            <h1 class="display-1">About Us</h1>
+            <h1 className="display-1">About Us</h1>
         </>} mt="15" mb="15" />
 
         <SplitBlock 

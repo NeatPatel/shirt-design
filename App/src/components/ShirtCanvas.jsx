@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import styles from './shirtcanvas.module.scss';
 import shirtF from '../assets/shirtFront.svg';
 import shirtB from '../assets/shirtBack.svg';
@@ -8,7 +8,7 @@ import redo from '../assets/redo.png';
 import undo from '../assets/undo.png';
 import clear from '../assets/remove.png';
 import DesignCanvas from './DesignCanvas.jsx';
-import { Container, Row, Col, Card, Button, Offcanvas, Image } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Image } from 'react-bootstrap';
 
 function ShirtCanvas() {
     const designCanvasRef = useRef(null);
