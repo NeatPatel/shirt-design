@@ -197,58 +197,79 @@ const DesignCanvas = forwardRef((props, ref) => {
 
             // Event Listeners
             window.addEventListener("keydown", onKeyDown);
-            undoButton.addEventListener("click", () => replayState(undoStates, redoStates, redoButton, undoButton));
-            redoButton.addEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
+            undoButton.addEventListener("click", undoEvent);
+            redoButton.addEventListener("click", redoEvent);
             clearButton.addEventListener("click", clearObjects);
             uploadButton.addEventListener("click", uploadImage);
 
             const allLinks = document.querySelectorAll("a");
 
             allLinks.forEach((a) => {
-                a.addEventListener("click", (e) => {
-                    if(!(undoStates == 0 && redoStates == 0 && undoF.length == 0 && redoF.length == 0 && undoB.length == 0 && redoB.length == 0 && undoL.length == 0 && redoL.length == 0 && undoR.length == 0 && redoR.length == 0)) {
-                        e.preventDefault();
-                        confirm("You have unsaved changes, are you sure?");
-                    }
-                });
+                a.addEventListener("click", clickLink);
             });
 
-            window.addEventListener("beforeunload", (e) => {
-                if(undoStates == 0 && redoStates == 0 && undoF.length == 0 && redoF.length == 0 && undoB.length == 0 && redoB.length == 0 && undoL.length == 0 && redoL.length == 0 && undoR.length == 0 && redoR.length == 0) return;
-                e.preventDefault();
-            });
+            window.addEventListener("beforeunload", reloadEvent);
 
-            window.addEventListener("resize", () => {
-                windowWidth = window.innerWidth;
-                windowHeight = window.innerHeight;
-
-                const oldScaleFactor = scaleFactor;
-
-                canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
-                canvasHeight = canvasWidth;
-
-                cBase = ((windowHeight) > (windowWidth) ? (1280 * 0.75) : (585 * 0.65));
-                // Temporarily change scaleFactor for scaling current items
-                scaleFactor = (canvasWidth / cBase) / oldScaleFactor;
-
-                canvasResize();
-
-                // reset scaleFactor to normal
-                scaleFactor = canvasWidth / cBase;
-            });
+            window.addEventListener("resize", resizeEvent);
             // End Event Listeners
 
             // Remove Event Listeners (if any)
             return () => {
-                undoButton.removeEventListener("click", () => replayState(undoStates, redoStates, redoButton, undoButton));
-                redoButton.removeEventListener("click", () => replayState(redoStates, undoStates, undoButton, redoButton));
+                undoButton.removeEventListener("click", undoEvent);
+                redoButton.removeEventListener("click", redoEvent);
                 clearButton.removeEventListener("click", clearObjects);
                 uploadButton.removeEventListener("click", uploadImage);
                 window.removeEventListener("keydown", onKeyDown);
-                window.removeEventListener("resize", () => {});
+                window.removeEventListener("resize", resizeEvent);
+                allLinks.forEach((a) => {
+                    a.removeEventListener("click", clickLink);
+                });
+                window.removeEventListener("beforeunload", reloadEvent);
             }
         }
     }, [canvasF, canvasB, canvasL, canvasR]);
+
+    function reloadEvent(e) {
+        if(undoStates == 0 && redoStates == 0 && undoF.length == 0 && redoF.length == 0 && undoB.length == 0 && redoB.length == 0 && undoL.length == 0 && redoL.length == 0 && undoR.length == 0 && redoR.length == 0) return;
+        e.preventDefault();
+    }
+
+    function undoEvent() {
+        replayState(undoStates, redoStates, redoButton, undoButton);
+    }
+
+    function redoEvent() {
+        replayState(redoStates, undoStates, undoButton, redoButton);
+    }
+
+    function clickLink(e) {
+        if(!(undoStates == 0 && redoStates == 0 && undoF.length == 0 && redoF.length == 0 && undoB.length == 0 && redoB.length == 0 && undoL.length == 0 && redoL.length == 0 && undoR.length == 0 && redoR.length == 0)) {
+            if(confirm("You have unsaved changes, are you sure?")) {
+                return;
+            } else {
+                e.preventDefault();
+            }
+        }
+    }
+
+    function resizeEvent() {
+        windowWidth = window.innerWidth;
+        windowHeight = window.innerHeight;
+
+        const oldScaleFactor = scaleFactor;
+
+        canvasWidth = ((windowHeight) > (windowWidth) ? (windowWidth * 0.75) : (windowHeight * 0.65));
+        canvasHeight = canvasWidth;
+
+        cBase = ((windowHeight) > (windowWidth) ? (1280 * 0.75) : (585 * 0.65));
+        // Temporarily change scaleFactor for scaling current items
+        scaleFactor = (canvasWidth / cBase) / oldScaleFactor;
+
+        canvasResize();
+
+        // reset scaleFactor to normal
+        scaleFactor = canvasWidth / cBase;
+    }
 
     // Change Canvas and contents based on screen size
     const canvasResize = () => {
