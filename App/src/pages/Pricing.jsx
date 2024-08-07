@@ -7,45 +7,38 @@ import TripleBlock from '../components/TripleBlock.jsx';
 import { Button, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import shirt from '../assets/shirt.png';
+
 function Pricing(){
     return (<>
         <ContentBlock content={<>
             <h1 class="display-1">Pricing</h1>
         </>} mt="15" mb="15" />
 
-        <ContentBlock content={<>
-            <h1 class="text-primary">Individual</h1>
-        </>} mt="15" mb="15" />
 
         <SplitBlock 
             left={<>
-                <h1 class="text-right me-0">T-Shirts</h1>
+                <h1 class="text-primary">T-Shirts</h1>
+                <Image src={shirt}/>
+                <h3>Individual:$</h3>
+                <h3>Bulk (20 or more):$$</h3>
             </>}
             
             right={<>
-                <h1>Long-Sleeve Shirts</h1>
+                <h1 class="text-primary">Hoodies</h1>
+                <p>placeholder for hoodie image</p>
+                <h3>Individual:$</h3>
+                <h3>Bulk (20 or more):$$</h3>
             </>}
             
             mt="0" 
             mb="25" 
         />
 
-        <TripleBlock 
-            left={<>
-                <h1>Jackets</h1>
-            </>}
+        <ContentBlock content={<>
+            <h5 class="text-dark">additional charge message/shipping handling</h5>
+        </>} mt="15" mb="15" />
 
-            middle={<>
-                <h1>Sweaters</h1>
-            </>}
-            
-            right={<>
-                <h1>Hoodies</h1>
-            </>}
-            
-            mt="0" 
-            mb="25" 
-        />
     </>)
 }
 
