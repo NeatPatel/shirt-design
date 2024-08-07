@@ -8,6 +8,9 @@ import Terms from './pages/Terms.jsx';
 import Contact from './pages/Contact.jsx';
 import { Nbar as Navbar } from './components/Nbar.jsx';
 
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -24,9 +27,35 @@ function App() {
     )
   );
 
+  const [array, setArray] = useState([]);
+
+  const fetchAPI = async () => {
+    const response = await axios.get("http://localhost:8080/api");
+    setArray(response.data.fruits);
+    console.log(response.data.fruits);
+  };
+
+  useEffect(() => {
+    fetchAPI();
+  }, []);
+
   return (
     <>
       <RouterProvider router={router} />
+      
+      
+      <h1>Test</h1>
+      <div>
+        <p>hello world</p>
+        {
+          array.map((fruit, index) => (
+            <div key={index}>
+              <p>{fruit}</p>
+              <br></br>
+            </div>
+          ))
+        }
+      </div>
     </>
   )
 }
