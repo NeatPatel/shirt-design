@@ -1,5 +1,6 @@
 import styles from './customtabs.module.scss';
-import { Form, Card, Nav, Tab, Tabs, Button } from 'react-bootstrap';
+import shirt from '../assets/shirt.png'
+import { Form, Card, Tab, Tabs, Button, Image } from 'react-bootstrap';
 import SplitBlock from './SplitBlock';
 
 function CustomTabs() {
@@ -49,14 +50,14 @@ function CustomTabs() {
                     </Tab>
                 </Tabs>    
             </Tab>
-            <Tab eventKey="shapesArt" title="Shapes, Art & Text">
+            <Tab eventKey="shapesArt" title="Art & Text">
                 <p className="text-center">Select a tab to browse that category!</p>
                 <Tabs justify variant='pills'>
-                    <Tab eventKey="shape1" title="Shape1">
+                    <Tab eventKey="shape1" title="Shapes">
                         <SplitBlock mt={1}
                         left={<>
-                            <Card>
-                                <p>image goes here</p>
+                            <Card className="justify-content-center align-items-center">
+                                <Image src={shirt} height="100svh" width="100svw" />
                                 <h1>Title</h1>
                                 <p>text</p>
                             </Card>
@@ -70,7 +71,7 @@ function CustomTabs() {
                         </>}
                         />
                     </Tab>
-                    <Tab eventKey="shape2" title="Shape2">
+                    <Tab eventKey="shape2" title="Text">
                         <SplitBlock mt={1}
                             left={<>
                                 <Card>
@@ -88,7 +89,7 @@ function CustomTabs() {
                             </>}
                         />
                     </Tab>
-                    <Tab eventKey="shape3" title="Shape3">
+                    <Tab eventKey="shape3" title="Art">
                     <SplitBlock mt={1}
                         left={<>
                             <Card>
@@ -116,6 +117,9 @@ function CustomTabs() {
                 <div className="text-center">
                     <Button id="uploadButton" size="lg" className="text-center">Add to Canvas</Button>
                 </div>
+            </Tab>
+            <Tab eventKey="currentObject" title="Current Object">
+                <p>There are no objects currently selected</p>
             </Tab>
         </Tabs>
     </>);
