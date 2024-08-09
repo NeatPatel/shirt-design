@@ -61,8 +61,12 @@ const CustomTabs = forwardRef((props, ref) => {
         if((objData.top).toFixed(1) != parseFloat(objYRef.current.value)) objYRef.current.value = (objData.top).toFixed(1);
         if((objData.angle).toFixed(1) != parseFloat(objAngleRef.current.value)) objAngleRef.current.value = (objData.angle).toFixed(1);
         if((objData.opacity).toFixed(2) != parseFloat(objOpacityRef.current.value)) objOpacityRef.current.value = (objData.opacity).toFixed(2);
-        if(objData.flipX != objFlipXRef.current.checked) objFlipXRef.current.checked = objData.flipX;
-        if(objData.flipY != objFlipYRef.current.checked) objFlipYRef.current.checked = objData.flipY;
+        
+        if(objData.flipX) objFlipXRef.current.checked = true;
+        else objFlipXRef.current.checked = false;
+        if(objData.flipY) objFlipYRef.current.checked = true;
+        else objFlipYRef.current.checked = false;
+        
         if(objData.type == "image") {
             setHasFill(false);
         } else {

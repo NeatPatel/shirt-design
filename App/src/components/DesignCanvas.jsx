@@ -79,8 +79,8 @@ const DesignCanvas = forwardRef((props, ref) => {
                 top: parseFloat(objData.y),
                 opacity: parseFloat(objData.opacity),
                 angle: parseFloat(objData.angle),
-                flipX: (objData.flipX == "true"),
-                flipY: (objData.flipY == "true")
+                flipX: objData.flipX,
+                flipY: objData.flipY
             });
             if(objData.fill) activeObj.set({fill: objData.fill});
             canvas.discardActiveObject();
