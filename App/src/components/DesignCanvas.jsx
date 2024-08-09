@@ -69,6 +69,24 @@ const DesignCanvas = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         changeCanvasButton(newView) {
             changeCanvasView(newView);
+        },
+        updateActiveObject(objData) {
+            const activeObj = canvas.getActiveObject();
+            activeObj.set({
+                scaleX: (parseFloat(objData.width) / activeObj.width),
+                scaleY: (parseFloat(objData.height) / activeObj.height),
+                left: parseFloat(objData.x),
+                top: parseFloat(objData.y),
+                opacity: parseFloat(objData.opacity),
+                angle: parseFloat(objData.angle),
+                flipX: (objData.flipX == "true"),
+                flipY: (objData.flipY == "true")
+            });
+            if(objData.fill) activeObj.set({fill: objData.fill});
+            canvas.discardActiveObject();
+            canvas.setActiveObject(activeObj);
+            canvas.requestRenderAll();
+            save();
         }
     }));
 
@@ -82,8 +100,6 @@ const DesignCanvas = forwardRef((props, ref) => {
         else if(canvasView == "B") canvas = canvasB;
         else if(canvasView == "L") canvas = canvasL;
         else if(canvasView == "R") canvas = canvasR;
-
-        console.log("re-render");
     });
 
     // Create Canvases
@@ -129,13 +145,7 @@ const DesignCanvas = forwardRef((props, ref) => {
 
             // Create Background Image
             const setup = () => {
-                try {
-                    loadBgImg();
-
-                    save();
-                } catch(err) {
-                    console.log("ERROR: Background Image Not Loaded");
-                }
+                loadBgImg();
             };
 
             setup();
@@ -143,8 +153,8 @@ const DesignCanvas = forwardRef((props, ref) => {
 
             // keydown Events
             const onKeyDown = async (e) => {
-                if(e.keyCode == 8 || e.keyCode == 46) {
-                    // Press "Backspace" or "Delete"
+                if(e.keyCode == 68) {
+                    // Press "D"
                     canvas.remove(canvas.getActiveObject());
                     canvas.requestRenderAll();
                     save();
@@ -188,12 +198,27 @@ const DesignCanvas = forwardRef((props, ref) => {
             }
             // End keydown Events
 
-            // Undo/Redo Events (one for each canvas)
+            // Canvas Events (one for each canvas)
             canvasF.on("object:modified", () => save());
             canvasB.on("object:modified", () => save());
             canvasL.on("object:modified", () => save());
             canvasR.on("object:modified", () => save());
-            // End Undo/Redo Events
+
+            canvasF.on("selection:created", () => props.onObjSelected(canvasF.getActiveObject()));
+            canvasB.on("selection:created", () => props.onObjSelected(canvasB.getActiveObject()));
+            canvasL.on("selection:created", () => props.onObjSelected(canvasL.getActiveObject()));
+            canvasR.on("selection:created", () => props.onObjSelected(canvasR.getActiveObject()));
+
+            canvasF.on("selection:updated", () => props.onObjSelected(canvasF.getActiveObject()));
+            canvasB.on("selection:updated", () => props.onObjSelected(canvasB.getActiveObject()));
+            canvasL.on("selection:updated", () => props.onObjSelected(canvasL.getActiveObject()));
+            canvasR.on("selection:updated", () => props.onObjSelected(canvasR.getActiveObject()));
+
+            canvasF.on("selection:cleared", props.onObjUnselected);
+            canvasB.on("selection:cleared", props.onObjUnselected);
+            canvasL.on("selection:cleared", props.onObjUnselected);
+            canvasR.on("selection:cleared", props.onObjUnselected);
+            // End Canvas Events
 
             // Event Listeners
             window.addEventListener("keydown", onKeyDown);
@@ -342,6 +367,11 @@ const DesignCanvas = forwardRef((props, ref) => {
 
         // Initialize/redefine currentState
         currentState = JSON.stringify(canvas);
+
+        // If there is an active object, update it
+        if(canvas.getActiveObject()) {
+            props.onObjSaved(canvas.getActiveObject());
+        }
     }
 
     // Uploading a user image
@@ -352,7 +382,7 @@ const DesignCanvas = forwardRef((props, ref) => {
             let fReader = new FileReader();
 
             let fileType = uploadSrc.files[0].type;
-            if(fileType == "image/apng" || fileType == "image/png" || fileType == "image/avif" || fileType == "image/jpg" || fileType == "image/svg" || fileType == "image/gif" || fileType == "image/webp") {
+            if(fileType == "image/apng" || fileType == "image/png" || fileType == "image/avif" || fileType == "image/jpg" || fileType == "image/svg+xml" || fileType == "image/gif" || fileType == "image/webp") {
                 fReader.readAsDataURL(uploadSrc.files[0]);
             } else {
                 alert("Invalid File Type");
@@ -369,6 +399,7 @@ const DesignCanvas = forwardRef((props, ref) => {
                 });
                 scaleObject(img);
                 canvas.add(img);
+                canvas.setActiveObject(img);
                 canvas.requestRenderAll();
                 save();
             };
@@ -424,6 +455,8 @@ const DesignCanvas = forwardRef((props, ref) => {
         canvasR.clipPath = shape;
         canvasR.clipPath.fixed = true;
         canvasR.requestRenderAll();
+
+        if(!currentState) save();
     }
 
     // Set the canvas size accordingly
@@ -562,7 +595,7 @@ const DesignCanvas = forwardRef((props, ref) => {
         const rect = new Rect({
             left: 100,
             top: 50,
-            fill: "#ff000011",
+            fill: "#ff0000",
             width: 150,
             height: 100
         });
@@ -570,6 +603,7 @@ const DesignCanvas = forwardRef((props, ref) => {
         scaleObject(rect);
 
         canvas.add(rect);
+        canvas.setActiveObject(rect);
         canvas.requestRenderAll();
         save();
     };
